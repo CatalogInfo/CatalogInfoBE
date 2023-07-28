@@ -23,7 +23,7 @@ public class BookController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/category/{categoryId}/book")
+    @GetMapping("/category/{category_id}/book")
     public ResponseEntity<List<BookResponse>> getAllBooksByCategoryId(@PathVariable("category_id") Long categoryId) {
         ArrayList<Book> books = new ArrayList<>(bookRepository.findByCategoryId(categoryId));
         ArrayList<BookResponse> bookResponses = new ArrayList<>();
