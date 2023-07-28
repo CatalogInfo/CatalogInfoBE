@@ -13,7 +13,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class CategoryController {
 
     @Autowired
@@ -64,14 +64,3 @@ public class CategoryController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
-
-    /*@GetMapping("/tutorials/published")
-    public ResponseEntity<List<Category>> findByVideos() {
-        List<Category> category = categoryRepository.findByVideos(true);
-
-        if (category.isEmpty()) {
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
-        }
-
-        return new ResponseEntity<>(category, HttpStatus.OK);
-        */

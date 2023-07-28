@@ -1,7 +1,5 @@
 package com.example.CatalogInfoBE.book;
 
-import com.example.CatalogInfoBE.book.Book;
-import com.example.CatalogInfoBE.book.BookRepository;
 import com.example.CatalogInfoBE.category.Category;
 import com.example.CatalogInfoBE.category.CategoryRepository;
 import com.example.CatalogInfoBE.dto.responses.BookResponse;
@@ -13,11 +11,10 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Optional;
 
 @CrossOrigin(origins = "http://localhost:8081")
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/")
 public class BookController {
 
     @Autowired
@@ -27,15 +24,22 @@ public class BookController {
     private CategoryRepository categoryRepository;
 
     @GetMapping("/category/{categoryId}/book")
-    public ResponseEntity<List<Book>> getAllBooksByCategoryId(@PathVariable("category_id") Long category_id) {
-        if (!categoryRepository.existsById(category_id)) {
-            throw new ResourceNotFoundException("Not found Category with id : " + category_id);
+    public ResponseEntity<List<BookResponse>> getAllBooksByCategoryId(@PathVariable("category_id") Long categoryId) {
+        ArrayList<Book> books = new ArrayList<>(bookRepository.findByCategoryId(categoryId));
+        ArrayList<BookResponse> bookResponses = new ArrayList<>();
+        for (Book book : books) {
+
+            BookResponse bookResponse = new BookResponse();
+
+            bookResponse.setText(book.getText());
+            bookResponse.setAuthor(book.getAuthor());
+            bookResponse.setName(book.getName());
+            bookResponse.setStyle(book.getStyle());
+
+            bookResponses.add(bookResponse);
         }
-
-        List<Book> books = bookRepository.findByCategoryId(category_id);
-        return new ResponseEntity<>(books, HttpStatus.OK);
+            return new ResponseEntity<>(bookResponses, HttpStatus.OK);
     }
-
     @GetMapping("/book/{book_id}")
     public ResponseEntity<BookResponse> getBookById(@PathVariable("book_id") Long id) {
         Book book = bookRepository.findById(id)
@@ -48,7 +52,7 @@ public class BookController {
 
     @PostMapping("/category/{category_id}/book")
     public ResponseEntity<String> createBook(@PathVariable("category_id") Long categoryId,
-                                           @RequestBody Book bookRequest) {
+                                             @RequestBody Book bookRequest) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("categoryId " + categoryId + " not found"));
 
@@ -69,28 +73,29 @@ public class BookController {
     }
 
     @PutMapping("/book/{books_id}")
-    public ResponseEntity<Book> updateBook(@PathVariable("books_id") long id, @RequestBody Book bookRequest) {
-        Book books = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("BookId " + id + " not found"));
+    public ResponseEntity<String> updateBook(@PathVariable("books_id") Long bookId, @RequestBody Book bookRequest) {
+        Book book = bookRepository.findById(bookId)
+                .orElseThrow(() -> new ResourceNotFoundException("Book with id " + bookId + " not found"));
 
-        books.setText(bookRequest.getText());
-
-        return new ResponseEntity<>(bookRepository.save(books), HttpStatus.OK);
+        book.setText(bookRequest.getText());
+        book.setAuthor(bookRequest.getAuthor());
+        book.setName(bookRequest.getName());
+        book.setStyle(bookRequest.getStyle());
+        bookRepository.save(book);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @DeleteMapping("/book/{books_id}")
-    public ResponseEntity<HttpStatus> deleteBook(@PathVariable("books_id") long id) {
+    public ResponseEntity<String> deleteBook(@PathVariable("books_id") long id) {
         bookRepository.deleteById(id);
-        return new ResponseEntity<>(HttpStatus.OK);
+        return new ResponseEntity<>("Deleted successfully", HttpStatus.OK);
+
     }
 
     @DeleteMapping("/category/{category_id}/book")
-    public ResponseEntity<List<Book>> deleteAllBooksOfCategory(@PathVariable("category_id") Long categoryId) {
-        if (!categoryRepository.existsById(categoryId)) {
-            throw new ResourceNotFoundException("Not found Category with id : " + categoryId);
-        }
+    public ResponseEntity<String> deleteAllBooksOfCategory(@PathVariable("category_id") long id) {
+        categoryRepository.deleteById(id);
+            return new ResponseEntity<>("Category has been deleted successfully",HttpStatus.OK);
 
-        bookRepository.deleteByCategoryId(categoryId);
-        return new ResponseEntity<>(HttpStatus.OK);
+        }
     }
-}
