@@ -1,7 +1,9 @@
 package com.example.CatalogInfoBE.category;
 
+import com.example.CatalogInfoBE.book.Book;
 import com.example.CatalogInfoBE.category.Category;
 import com.example.CatalogInfoBE.category.CategoryRepository;
+import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
@@ -11,29 +13,52 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
-@RequestMapping("/")
+@RequestMapping(value="/", produces = "application/json")
 public class CategoryController {
 
     @Autowired
     private CategoryRepository categoryRepository;
 
     @GetMapping("/category")
-    public ResponseEntity<List<Category>> getAllCategories() {
+    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
         List<Category> categories;
 
         categories = categoryRepository.findAll();
 
-        return new ResponseEntity<>(categories, HttpStatus.OK);
+        List<CategoryResponse> response = new ArrayList<>();
+
+        for(Category category : categories) {
+            CategoryResponse categoryResponse = new CategoryResponse();
+            categoryResponse.setId(category.getId());
+            categoryResponse.setName(category.getName());
+
+            for(Book book : category.getBooks()){
+                categoryResponse.addBook(book.getId());
+            }
+            response.add(categoryResponse);
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/category/{id}")
-    public ResponseEntity<Category> getCategoryById(@PathVariable("category_id") long id) {
+    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("category_id") long id) {
         Category category = categoryRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id : " + id));
 
-        return new ResponseEntity<>(category, HttpStatus.OK);
+        CategoryResponse response = new CategoryResponse();
+
+        CategoryResponse categoryResponse = new CategoryResponse();
+        categoryResponse.setId(category.getId());
+        categoryResponse.setName(category.getName());
+
+        for(Book book : category.getBooks()){
+            categoryResponse.addBook(book.getId());
+        }
+
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @PostMapping("/category")

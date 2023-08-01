@@ -12,9 +12,9 @@ import org.springframework.web.bind.annotation.*;
 import java.util.ArrayList;
 import java.util.List;
 
-@CrossOrigin(origins = "http://localhost:8081")
+@CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
-@RequestMapping("/")
+@RequestMapping(value="/", produces = "application/json")
 public class BookController {
 
     @Autowired
@@ -31,6 +31,7 @@ public class BookController {
 
             BookResponse bookResponse = new BookResponse();
 
+            bookResponse.setId(book.getId());
             bookResponse.setText(book.getText());
             bookResponse.setAuthor(book.getAuthor());
             bookResponse.setName(book.getName());
@@ -51,11 +52,12 @@ public class BookController {
     }
 
     @PostMapping("/category/{category_id}/book")
-    public ResponseEntity<String> createBook(@PathVariable("category_id") Long categoryId,
+    public ResponseEntity<BookResponse> createBook(@PathVariable("category_id") Long categoryId,
                                              @RequestBody Book bookRequest) {
         Category category = categoryRepository.findById(categoryId)
                 .orElseThrow(() -> new ResourceNotFoundException("categoryId " + categoryId + " not found"));
 
+        System.out.println(String.valueOf(bookRequest.getAuthor()));
         Book book = new Book();
         book.setCategory(category);
         book.setText(bookRequest.getText());
@@ -68,7 +70,10 @@ public class BookController {
         bookRepository.save(book);
         categoryRepository.save(category);
 
-        return new ResponseEntity<>("created", HttpStatus.CREATED);
+        BookResponse bookResponse = new BookResponse(book.getId(), book.getName(), book.getStyle(), book.getAuthor(), book.getText(), book.getCategory().getId());
+
+
+        return new ResponseEntity<>(bookResponse, HttpStatus.CREATED);
 
     }
 

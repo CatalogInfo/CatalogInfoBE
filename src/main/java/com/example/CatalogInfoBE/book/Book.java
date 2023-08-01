@@ -23,9 +23,11 @@ public class Book {
 
     private String author;
 
+    @Column(columnDefinition="text")
     private String text;
 
     private String style;
+
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id", nullable = false)
