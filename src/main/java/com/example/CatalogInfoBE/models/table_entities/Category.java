@@ -1,6 +1,7 @@
-package com.example.CatalogInfoBE.category;
+package com.example.CatalogInfoBE.models.table_entities;
 
-import com.example.CatalogInfoBE.book.Book;
+import com.example.CatalogInfoBE.models.interfaces.Model;
+import com.example.CatalogInfoBE.models.table_entities.Book;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -16,13 +17,17 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category {
+public class Category implements Model{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private long id;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Book> books;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "user_id", nullable = false)
+    private User user;
 
     private String name;
 

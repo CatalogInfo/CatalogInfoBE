@@ -1,16 +1,18 @@
-package com.example.CatalogInfoBE.dto.responses;
+package com.example.CatalogInfoBE.dto.requests;
 
 import lombok.*;
 
 import java.util.ArrayList;
-import java.util.List;
 
 @Getter
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
-public class CategoryResponse {
+public class CategoryRequest {
+
     Long id;
+
     String name;
+
 }

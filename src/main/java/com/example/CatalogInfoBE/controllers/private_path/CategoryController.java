@@ -1,10 +1,15 @@
 package com.example.CatalogInfoBE.controllers.private_path;
 
-import com.example.CatalogInfoBE.book.Book;
-import com.example.CatalogInfoBE.category.Category;
+import com.example.CatalogInfoBE.dto.requests.CategoryRequest;
+import com.example.CatalogInfoBE.models.table_entities.Book;
+import com.example.CatalogInfoBE.models.table_entities.Category;
+import com.example.CatalogInfoBE.models.table_entities.User;
 import com.example.CatalogInfoBE.repos.CategoryRepository;
 import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
+import com.example.CatalogInfoBE.services.CategoryService;
+import com.example.CatalogInfoBE.services.JwtUserDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -20,49 +25,54 @@ public class CategoryController {
     @Autowired
     private CategoryRepository categoryRepository;
 
-    @GetMapping("/category")
-    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-        List<Category> categories;
+    @Autowired
+    CategoryService categoryService;
 
-        categories = categoryRepository.findAll();
+    @Autowired
+    JwtUserDetailsService jwtUserDetailsService;
 
-        List<CategoryResponse> response = new ArrayList<>();
+//    @GetMapping("/category")
+//    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
+//        List<Category> categories = categoryRepository.findAll();
+//
+//        List<CategoryResponse> response = new ArrayList<>();
+//
+//        for(Category category : categories) {
+//            CategoryResponse categoryResponse = new CategoryResponse();
+//            categoryResponse.setId(category.getId());
+//            categoryResponse.setName(category.getName());
+//
+//            for(Book book : category.getBooks()){
+//                categoryResponse.addBook(book.getId());
+//            }
+//            response.add(categoryResponse);
+//        }
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
-        for(Category category : categories) {
-            CategoryResponse categoryResponse = new CategoryResponse();
-            categoryResponse.setId(category.getId());
-            categoryResponse.setName(category.getName());
-
-            for(Book book : category.getBooks()){
-                categoryResponse.addBook(book.getId());
-            }
-            response.add(categoryResponse);
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
-
-    @GetMapping("/category/{id}")
-    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("category_id") long id) {
-        Category category = categoryRepository.getReferenceById(id);
-
-        CategoryResponse response = new CategoryResponse();
-
-        CategoryResponse categoryResponse = new CategoryResponse();
-        categoryResponse.setId(category.getId());
-        categoryResponse.setName(category.getName());
-
-        for(Book book : category.getBooks()){
-            categoryResponse.addBook(book.getId());
-        }
-
-        return new ResponseEntity<>(response, HttpStatus.OK);
-    }
+//    @GetMapping("/category/{id}")
+//    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("category_id") long id) {
+//        Category category = categoryRepository.getReferenceById(id);
+//
+//        CategoryResponse response = new CategoryResponse();
+//
+//        CategoryResponse categoryResponse = new CategoryResponse();
+//        categoryResponse.setId(category.getId());
+//        categoryResponse.setName(category.getName());
+//
+//        for(Book book : category.getBooks()){
+//            categoryResponse.addBook(book.getId());
+//        }
+//
+//        return new ResponseEntity<>(response, HttpStatus.OK);
+//    }
 
     @PostMapping("/category")
-    public ResponseEntity<Category> createCategory(@RequestBody Category category) {
-        Category myCategory = categoryRepository.save(new Category(category.getName()));
-        return new ResponseEntity<>(myCategory, HttpStatus.CREATED);
+    public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest, @RequestHeader HttpHeaders headers) {
+        User user = jwtUserDetailsService.getUserFromHeaders(headers);
+
+        return new ResponseEntity<>(categoryService.createCategory(categoryRequest, user), HttpStatus.CREATED);
     }
 
     @PutMapping("/category/{id}")

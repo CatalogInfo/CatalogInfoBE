@@ -1,6 +1,6 @@
-package com.example.CatalogInfoBE.book;
+package com.example.CatalogInfoBE.models.table_entities;
 
-import com.example.CatalogInfoBE.category.Category;
+import com.example.CatalogInfoBE.models.interfaces.Model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,7 +14,7 @@ import javax.persistence.*;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Book {
+public class Book implements Model {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

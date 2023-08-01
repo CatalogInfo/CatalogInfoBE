@@ -1,18 +1,20 @@
 package com.example.CatalogInfoBE.models.table_entities;
 
+import com.example.CatalogInfoBE.models.interfaces.Model;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 @Entity
 @Table(name = "users")
 @Getter@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class User {
+public class User implements Model {
 
     @Id
     @SequenceGenerator(
@@ -26,6 +28,9 @@ public class User {
     )
     private long id;
 
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL)
+    private List<Category> categories;
+
     private String username;
 
     private String password;
@@ -37,5 +42,9 @@ public class User {
         this.username = username;
         this.password = password;
         this.email = email;
+    }
+
+    public void addCategory(Category category) {
+        categories.add(category);
     }
 }

@@ -1,7 +1,7 @@
 package com.example.CatalogInfoBE.controllers.private_path;
 
-import com.example.CatalogInfoBE.book.Book;
-import com.example.CatalogInfoBE.category.Category;
+import com.example.CatalogInfoBE.models.table_entities.Book;
+import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.repos.BookRepository;
 import com.example.CatalogInfoBE.repos.CategoryRepository;
 import com.example.CatalogInfoBE.dto.responses.BookResponse;
