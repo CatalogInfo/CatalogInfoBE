@@ -1,10 +1,11 @@
-package com.example.CatalogInfoBE.book;
+package com.example.CatalogInfoBE.controllers.private_path;
 
+import com.example.CatalogInfoBE.book.Book;
 import com.example.CatalogInfoBE.category.Category;
-import com.example.CatalogInfoBE.category.CategoryRepository;
+import com.example.CatalogInfoBE.repos.BookRepository;
+import com.example.CatalogInfoBE.repos.CategoryRepository;
 import com.example.CatalogInfoBE.dto.responses.BookResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -43,8 +44,7 @@ public class BookController {
     }
     @GetMapping("/book/{book_id}")
     public ResponseEntity<BookResponse> getBookById(@PathVariable("book_id") Long id) {
-        Book book = bookRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Book with id : " + id));
+        Book book = bookRepository.getReferenceById(id);
 
         BookResponse bookResponse = new BookResponse(book.getId(), book.getName(), book.getStyle(), book.getAuthor(), book.getText(), book.getCategory().getId());
 
@@ -54,8 +54,7 @@ public class BookController {
     @PostMapping("/category/{category_id}/book")
     public ResponseEntity<BookResponse> createBook(@PathVariable("category_id") Long categoryId,
                                              @RequestBody Book bookRequest) {
-        Category category = categoryRepository.findById(categoryId)
-                .orElseThrow(() -> new ResourceNotFoundException("categoryId " + categoryId + " not found"));
+        Category category = categoryRepository.getReferenceById(categoryId);
 
         System.out.println(String.valueOf(bookRequest.getAuthor()));
         Book book = new Book();
@@ -79,8 +78,7 @@ public class BookController {
 
     @PutMapping("/book/{books_id}")
     public ResponseEntity<String> updateBook(@PathVariable("books_id") Long bookId, @RequestBody Book bookRequest) {
-        Book book = bookRepository.findById(bookId)
-                .orElseThrow(() -> new ResourceNotFoundException("Book with id " + bookId + " not found"));
+        Book book = bookRepository.getReferenceById(bookId);
 
         book.setText(bookRequest.getText());
         book.setAuthor(bookRequest.getAuthor());

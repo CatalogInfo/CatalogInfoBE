@@ -1,11 +1,10 @@
-package com.example.CatalogInfoBE.category;
+package com.example.CatalogInfoBE.controllers.private_path;
 
 import com.example.CatalogInfoBE.book.Book;
 import com.example.CatalogInfoBE.category.Category;
-import com.example.CatalogInfoBE.category.CategoryRepository;
+import com.example.CatalogInfoBE.repos.CategoryRepository;
 import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.rest.webmvc.ResourceNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -45,8 +44,7 @@ public class CategoryController {
 
     @GetMapping("/category/{id}")
     public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("category_id") long id) {
-        Category category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id : " + id));
+        Category category = categoryRepository.getReferenceById(id);
 
         CategoryResponse response = new CategoryResponse();
 
@@ -69,8 +67,7 @@ public class CategoryController {
 
     @PutMapping("/category/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable("category_id") long id, @RequestBody Category category) {
-        Category _category = categoryRepository.findById(id)
-                .orElseThrow(() -> new ResourceNotFoundException("Not found Category with id = " + id));
+        Category _category = categoryRepository.getReferenceById(id);
 
         _category.setName(category.getName());
 

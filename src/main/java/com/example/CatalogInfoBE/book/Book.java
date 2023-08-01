@@ -1,11 +1,12 @@
 package com.example.CatalogInfoBE.book;
 
 import com.example.CatalogInfoBE.category.Category;
-import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+
+import javax.persistence.*;
 
 @Entity
 @Table(name = "book")

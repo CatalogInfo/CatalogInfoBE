@@ -1,5 +1,6 @@
-package com.example.CatalogInfoBE.book;
+package com.example.CatalogInfoBE.repos;
 
+import com.example.CatalogInfoBE.book.Book;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
