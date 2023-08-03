@@ -2,8 +2,6 @@ package com.example.CatalogInfoBE.controllers.private_path;
 
 import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import com.example.CatalogInfoBE.dto.responses.UserResponse;
-import com.example.CatalogInfoBE.models.table_entities.Book;
-import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.models.table_entities.User;
 import com.example.CatalogInfoBE.services.JwtUserDetailsService;
 import com.example.CatalogInfoBE.services.UserService;
@@ -13,8 +11,6 @@ import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.ArrayList;
 import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
@@ -23,9 +19,9 @@ import java.util.List;
 public class UserController {
 
     @Autowired
-    UserService userService;
+    private UserService userService;
     @Autowired
-    JwtUserDetailsService jwtUserDetailsService;
+    private JwtUserDetailsService jwtUserDetailsService;
 
     @GetMapping("")
     public ResponseEntity<UserResponse> getUserInfo(@RequestHeader HttpHeaders headers) {
