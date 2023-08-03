@@ -12,7 +12,7 @@ import javax.persistence.*;
 import java.util.List;
 
 @Entity
-@Table(name = "category")
+@Table(name = "categories")
 @Getter
 @Setter
 @NoArgsConstructor
@@ -25,17 +25,20 @@ public class Category implements Model {
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Book> books;
 
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Video> videos;
+
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
     private String name;
 
-    public Category(String name) {
-        this.name = name;
-    }
-
     public void addBook(Book book) {
         books.add(book);
     }
+    public void addVideo(Video video) {
+        videos.add(video);
+    }
+
 }

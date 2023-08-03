@@ -2,7 +2,6 @@ package com.example.CatalogInfoBE.dto.responses;
 
 import lombok.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Getter
@@ -11,7 +10,8 @@ import java.util.List;
 @NoArgsConstructor
 @Data
 public class CategoryResponse {
-    Long id;
-    List<Long> books;
-    String name;
+    private Long id;
+    private List<Long> books;
+    private List<String> videos;
+    private String name;
 }

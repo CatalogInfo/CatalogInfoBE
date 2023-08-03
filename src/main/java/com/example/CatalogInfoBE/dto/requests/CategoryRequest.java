@@ -2,8 +2,6 @@ package com.example.CatalogInfoBE.dto.requests;
 
 import lombok.*;
 
-import java.util.ArrayList;
-
 @Getter
 @Setter
 @AllArgsConstructor

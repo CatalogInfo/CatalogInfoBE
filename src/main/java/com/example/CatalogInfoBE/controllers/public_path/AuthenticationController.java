@@ -23,7 +23,7 @@ public class AuthenticationController {
 
         RegistrationResponse response = authService.save(user);
 
-        if(response.emailUses || response.usernameUses)
+        if(response.isEmailUses() || response.isUsernameUses())
             return MakeResponse.makeConflictResponse(response);
 
         return MakeResponse.makeOkResponse(response);

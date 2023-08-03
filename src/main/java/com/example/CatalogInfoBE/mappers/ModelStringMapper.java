@@ -1,15 +1,16 @@
 package com.example.CatalogInfoBE.mappers;
 
 import com.example.CatalogInfoBE.models.interfaces.Model;
+import com.example.CatalogInfoBE.models.interfaces.ModelString;
 import org.mapstruct.Mapper;
 
 import java.util.List;
 
 @Mapper
-public interface ModelMapper {
-    default long toId(Model entity) {
+public interface ModelStringMapper {
+    default String toId(ModelString entity) {
         return entity.getId();
     }
 
-    List<Long> toIds(List<Model> entities);
+    List<String> toIds(List<ModelString> entities);
 }

@@ -13,10 +13,9 @@ import org.springframework.web.bind.annotation.*;
 @RestController
 @RequestMapping(value="/", produces = "application/json")
 public class BookController {
-    //
     @Autowired
     private BookService bookService;
-//test
+
     @PostMapping("/category/{category_id}/book")
     public ResponseEntity<BookResponse> createBook(@PathVariable("category_id") Long categoryId,
                                              @RequestBody BookRequest bookRequest) {

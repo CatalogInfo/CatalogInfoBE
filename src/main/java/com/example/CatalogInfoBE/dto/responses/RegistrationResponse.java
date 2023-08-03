@@ -6,12 +6,10 @@ import lombok.Getter;
 import lombok.Setter;
 
 @Data
-@Getter@Setter
 @AllArgsConstructor
+@Getter
+@Setter
 public class RegistrationResponse {
-
-    public boolean usernameUses;
-
-    public boolean emailUses;
-
+    private boolean usernameUses;
+    private boolean emailUses;
 }

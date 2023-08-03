@@ -1,4 +1,4 @@
-package com.example.CatalogInfoBE.dto.requests;
+package com.example.CatalogInfoBE.dto.responses;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import lombok.AllArgsConstructor;
@@ -11,8 +11,10 @@ import lombok.Setter;
 @AllArgsConstructor
 @Getter
 @Setter
-public class UserRequest {
-  private String username;
-  private String email;
-  private String password;
+public class VideoResponse {
+    private String id;
+    private String link;
+    private String title;
+    private String channelTitle;
+    private Long category;
 }

@@ -2,6 +2,7 @@ package com.example.CatalogInfoBE.controllers.private_path;
 
 import com.example.CatalogInfoBE.dto.requests.CategoryRequest;
 import com.example.CatalogInfoBE.dto.responses.BookResponse;
+import com.example.CatalogInfoBE.dto.responses.VideoResponse;
 import com.example.CatalogInfoBE.models.table_entities.User;
 import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import com.example.CatalogInfoBE.services.CategoryService;
@@ -26,6 +27,11 @@ public class CategoryController {
     @GetMapping("/{categoryId}/books")
     public ResponseEntity<List<BookResponse>> getBooks(@RequestHeader HttpHeaders headers, @PathVariable("categoryId") long categoryId) {
         return new ResponseEntity<>(categoryService.getBooks(categoryId), HttpStatus.OK);
+    }
+
+    @GetMapping("/{categoryId}/videos")
+    public ResponseEntity<List<VideoResponse>> getVideos(@RequestHeader HttpHeaders headers, @PathVariable("categoryId") long categoryId) {
+        return new ResponseEntity<>(categoryService.getVideos(categoryId), HttpStatus.OK);
     }
 
     @PostMapping("/")
