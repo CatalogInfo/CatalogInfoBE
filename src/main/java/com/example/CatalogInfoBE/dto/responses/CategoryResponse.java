@@ -12,5 +12,6 @@ import java.util.List;
 @Data
 public class CategoryResponse {
     Long id;
+    List<Long> books;
     String name;
 }

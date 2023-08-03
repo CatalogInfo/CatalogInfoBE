@@ -10,9 +10,5 @@ import java.util.ArrayList;
 @NoArgsConstructor
 @Data
 public class CategoryRequest {
-
-    Long id;
-
     String name;
-
 }

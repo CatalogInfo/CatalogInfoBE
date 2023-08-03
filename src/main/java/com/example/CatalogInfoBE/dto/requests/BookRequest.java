@@ -8,7 +8,6 @@ import lombok.*;
 @NoArgsConstructor
 @Data
 public class BookRequest {
-    Long id;
     String name;
     String style;
     String author;

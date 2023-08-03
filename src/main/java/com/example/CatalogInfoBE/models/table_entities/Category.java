@@ -17,7 +17,7 @@ import java.util.List;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class Category implements Model{
+public class Category implements Model {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;

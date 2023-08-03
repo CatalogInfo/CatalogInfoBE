@@ -1,6 +1,7 @@
 package com.example.CatalogInfoBE.controllers.private_path;
 
 import com.example.CatalogInfoBE.dto.requests.CategoryRequest;
+import com.example.CatalogInfoBE.dto.responses.BookResponse;
 import com.example.CatalogInfoBE.models.table_entities.Book;
 import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.models.table_entities.User;
@@ -19,7 +20,7 @@ import java.util.List;
 
 @CrossOrigin(origins = "http://localhost:5173", allowCredentials = "true")
 @RestController
-@RequestMapping(value="/", produces = "application/json")
+@RequestMapping(value="/category", produces = "application/json")
 public class CategoryController {
 
     @Autowired
@@ -31,51 +32,19 @@ public class CategoryController {
     @Autowired
     JwtUserDetailsService jwtUserDetailsService;
 
-//    @GetMapping("/category")
-//    public ResponseEntity<List<CategoryResponse>> getAllCategories() {
-//        List<Category> categories = categoryRepository.findAll();
-//
-//        List<CategoryResponse> response = new ArrayList<>();
-//
-//        for(Category category : categories) {
-//            CategoryResponse categoryResponse = new CategoryResponse();
-//            categoryResponse.setId(category.getId());
-//            categoryResponse.setName(category.getName());
-//
-//            for(Book book : category.getBooks()){
-//                categoryResponse.addBook(book.getId());
-//            }
-//            response.add(categoryResponse);
-//        }
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
+    @GetMapping("/{categoryId}/books")
+    public ResponseEntity<List<BookResponse>> getBooks(@RequestHeader HttpHeaders headers, @PathVariable("categoryId") long categoryId) {
+        return new ResponseEntity<>(categoryService.getBooks(categoryId), HttpStatus.OK);
+    }
 
-//    @GetMapping("/category/{id}")
-//    public ResponseEntity<CategoryResponse> getCategoryById(@PathVariable("category_id") long id) {
-//        Category category = categoryRepository.getReferenceById(id);
-//
-//        CategoryResponse response = new CategoryResponse();
-//
-//        CategoryResponse categoryResponse = new CategoryResponse();
-//        categoryResponse.setId(category.getId());
-//        categoryResponse.setName(category.getName());
-//
-//        for(Book book : category.getBooks()){
-//            categoryResponse.addBook(book.getId());
-//        }
-//
-//        return new ResponseEntity<>(response, HttpStatus.OK);
-//    }
-
-    @PostMapping("/category")
+    @PostMapping("/")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest, @RequestHeader HttpHeaders headers) {
         User user = jwtUserDetailsService.getUserFromHeaders(headers);
 
         return new ResponseEntity<>(categoryService.createCategory(categoryRequest, user), HttpStatus.CREATED);
     }
 
-    @PutMapping("/category/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<Category> updateCategory(@PathVariable("category_id") long id, @RequestBody Category category) {
         Category _category = categoryRepository.getReferenceById(id);
 
@@ -84,13 +53,13 @@ public class CategoryController {
         return new ResponseEntity<>(categoryRepository.save(_category), HttpStatus.OK);
     }
 
-    @DeleteMapping("/category/{id}")
+    @DeleteMapping("/{id}")
     public ResponseEntity<HttpStatus> deleteCategory(@PathVariable("category_id") long id) {
         categoryRepository.deleteById(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @DeleteMapping("/category")
+    @DeleteMapping("/")
     public ResponseEntity<HttpStatus> deleteAllCategories() {
         categoryRepository.deleteAll();
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
