@@ -22,4 +22,12 @@ public class VideoController {
     public ResponseEntity<VideoResponse> createVideo(@PathVariable("categoryId") long categoryId, @RequestHeader HttpHeaders headers, @RequestBody VideoRequest videoRequest) {
         return new ResponseEntity<>(videoService.createVideo(categoryId, videoRequest), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/category/{categoryId}/video/{videoId}")
+    public ResponseEntity<String> deleteBook(@PathVariable("categoryId") Long categoryId,
+                                             @PathVariable("videoId") String videoId) {
+        videoService.deleteVideo(videoId, categoryId);
+
+        return new ResponseEntity<>("deleted", HttpStatus.OK);
+    }
 }

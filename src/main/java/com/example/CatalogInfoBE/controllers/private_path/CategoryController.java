@@ -41,4 +41,11 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.createCategory(categoryRequest, user), HttpStatus.CREATED);
     }
 
+    @DeleteMapping("/{categoryId}")
+    public ResponseEntity<String> deleteCategory(@PathVariable("categoryId") long categoryId, @RequestHeader HttpHeaders headers) {
+        User user = jwtUserDetailsService.getUserFromHeaders(headers);
+
+        return new ResponseEntity<>(categoryService.deleteCategory(categoryId, user), HttpStatus.CREATED);
+    }
+
 }

@@ -3,6 +3,7 @@ package com.example.CatalogInfoBE.services;
 import com.example.CatalogInfoBE.dto.requests.VideoRequest;
 import com.example.CatalogInfoBE.dto.responses.VideoResponse;
 import com.example.CatalogInfoBE.mappers.VideoMapper;
+import com.example.CatalogInfoBE.models.table_entities.Book;
 import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.models.table_entities.Video;
 import com.example.CatalogInfoBE.repos.CategoryRepository;
@@ -30,5 +31,14 @@ public class VideoService {
         videoRepository.save(video);
 
         return VideoMapper.INSTANCE.toDto(video);
+    }
+
+    public void deleteVideo(String id, long categoryId) {
+        Category category = categoryRepository.getReferenceById(categoryId);
+        Video video = videoRepository.getReferenceById(id);
+
+        category.removeVideo(video);
+        videoRepository.delete(video);
+        categoryRepository.save(category);
     }
 }

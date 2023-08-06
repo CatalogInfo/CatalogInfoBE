@@ -41,4 +41,12 @@ public class Category implements Model {
         videos.add(video);
     }
 
+    public void removeBook(Book book) {
+        books.remove(book);
+    }
+
+    public void removeVideo(Video video) {
+        videos.remove(video);
+    }
+
 }

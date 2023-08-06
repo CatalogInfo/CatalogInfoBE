@@ -31,4 +31,13 @@ public class BookService {
         return BookMapper.INSTANCE.toDto(book);
     }
 
+    public void deleteBook(long id, long categoryId) {
+        Category category = categoryRepository.getReferenceById(categoryId);
+        Book book = bookRepository.getReferenceById(id);
+
+        category.removeBook(book);
+        bookRepository.delete(book);
+        categoryRepository.save(category);
+    }
+
 }

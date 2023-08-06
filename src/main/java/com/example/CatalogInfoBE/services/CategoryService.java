@@ -11,8 +11,10 @@ import com.example.CatalogInfoBE.models.table_entities.Book;
 import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.models.table_entities.User;
 import com.example.CatalogInfoBE.models.table_entities.Video;
+import com.example.CatalogInfoBE.repos.BookRepository;
 import com.example.CatalogInfoBE.repos.CategoryRepository;
 import com.example.CatalogInfoBE.repos.UserRepo;
+import com.example.CatalogInfoBE.repos.VideoRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -27,8 +29,11 @@ public class CategoryService {
 
     @Autowired
     UserRepo userRepo;
+    @Autowired
+    private BookRepository bookRepository;
 
-
+    @Autowired
+    private VideoRepository videoRepository;
     public List<BookResponse> getBooks(long categoryId) {
         Category category = categoryRepository.getReferenceById(categoryId);
         ArrayList<Book> books = new ArrayList<>(category.getBooks());
@@ -53,5 +58,24 @@ public class CategoryService {
         userRepo.save(user);
 
         return CategoryMapper.INSTANCE.toDto(category);
+    }
+
+    public String deleteCategory(long categoryId, User user) {
+        Category category = categoryRepository.getReferenceById(categoryId);
+        List<Book> books = category.getBooks();
+        List<Video> videos = category.getVideos();
+
+        for(Book book : books) {
+            bookRepository.delete(book);
+        }
+        for(Video video : videos) {
+            videoRepository.delete(video);
+        }
+
+        user.removeCategory(category);
+        userRepo.save(user);
+        categoryRepository.delete(category);
+
+        return "deleted";
     }
 }

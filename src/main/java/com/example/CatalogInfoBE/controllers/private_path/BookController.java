@@ -21,4 +21,12 @@ public class BookController {
                                              @RequestBody BookRequest bookRequest) {
         return new ResponseEntity<>(bookService.createBook(bookRequest, categoryId), HttpStatus.CREATED);
     }
+
+    @DeleteMapping("/category/{categoryId}/book/{bookId}")
+    public ResponseEntity<String> deleteBook(@PathVariable("categoryId") Long categoryId,
+                                                   @PathVariable("bookId") Long bookId) {
+        bookService.deleteBook(bookId, categoryId);
+
+        return new ResponseEntity<>("deleted", HttpStatus.OK);
+    }
 }
