@@ -13,5 +13,6 @@ public class CategoryResponse {
     private Long id;
     private List<Long> books;
     private List<String> videos;
+    private List<Long> articles;
     private String name;
 }

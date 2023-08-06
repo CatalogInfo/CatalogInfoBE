@@ -10,7 +10,7 @@ import org.mapstruct.factory.Mappers;
 
 import java.util.List;
 
-@Mapper(uses = { ModelStringMapper.class, ModelMapper.class, BookMapper.class, VideoMapper.class })
+@Mapper(uses = { ModelStringMapper.class, ModelMapper.class, BookMapper.class, VideoMapper.class, ArticleMapper.class })
 public interface CategoryMapper extends BaseDtoMapper<Category, CategoryRequest, CategoryResponse> {
   CategoryMapper INSTANCE = Mappers.getMapper(CategoryMapper.class);
 

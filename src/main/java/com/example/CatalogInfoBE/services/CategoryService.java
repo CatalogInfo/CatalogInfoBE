@@ -1,16 +1,15 @@
 package com.example.CatalogInfoBE.services;
 
 import com.example.CatalogInfoBE.dto.requests.CategoryRequest;
+import com.example.CatalogInfoBE.dto.responses.ArticleResponse;
 import com.example.CatalogInfoBE.dto.responses.BookResponse;
 import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import com.example.CatalogInfoBE.dto.responses.VideoResponse;
+import com.example.CatalogInfoBE.mappers.ArticleMapper;
 import com.example.CatalogInfoBE.mappers.BookMapper;
 import com.example.CatalogInfoBE.mappers.CategoryMapper;
 import com.example.CatalogInfoBE.mappers.VideoMapper;
-import com.example.CatalogInfoBE.models.table_entities.Book;
-import com.example.CatalogInfoBE.models.table_entities.Category;
-import com.example.CatalogInfoBE.models.table_entities.User;
-import com.example.CatalogInfoBE.models.table_entities.Video;
+import com.example.CatalogInfoBE.models.table_entities.*;
 import com.example.CatalogInfoBE.repos.BookRepository;
 import com.example.CatalogInfoBE.repos.CategoryRepository;
 import com.example.CatalogInfoBE.repos.UserRepo;
@@ -46,6 +45,13 @@ public class CategoryService {
         ArrayList<Video> videos = new ArrayList<>(category.getVideos());
 
         return VideoMapper.INSTANCE.toDtos(videos);
+    }
+
+    public List<ArticleResponse> getArticles(long categoryId) {
+        Category category = categoryRepository.getReferenceById(categoryId);
+        ArrayList<Article> articles = new ArrayList<>(category.getArticles());
+
+        return ArticleMapper.INSTANCE.toDtos(articles);
     }
 
     public CategoryResponse createCategory(CategoryRequest categoryRequest, User user) {

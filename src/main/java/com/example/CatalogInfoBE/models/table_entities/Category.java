@@ -9,6 +9,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.ArrayList;
 import java.util.List;
 
 @Entity
@@ -27,6 +28,9 @@ public class Category implements Model {
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Video> videos;
+
+    @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
+    private List<Article> articles;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
@@ -49,4 +53,11 @@ public class Category implements Model {
         videos.remove(video);
     }
 
+    public void addArticle(Article article) {
+        articles.add(article);
+    }
+
+    public void removeArticle(Article article) {
+        articles.remove(article);
+    }
 }
