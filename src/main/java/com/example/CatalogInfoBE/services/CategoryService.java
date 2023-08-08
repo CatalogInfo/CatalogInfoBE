@@ -54,6 +54,15 @@ public class CategoryService {
         return ArticleMapper.INSTANCE.toDtos(articles);
     }
 
+    public List<CategoryResponse> getChildren(long categoryId) {
+
+        Category category = categoryRepository.getReferenceById(categoryId);
+
+        List<Category> categories = categoryRepository.findByParent(category);
+
+        return CategoryMapper.INSTANCE.toDtos(categories);
+    }
+
     public CategoryResponse createCategory(CategoryRequest categoryRequest, User user) {
         Category category = CategoryMapper.INSTANCE.toEntity(categoryRequest);
 
@@ -64,6 +73,22 @@ public class CategoryService {
         userRepo.save(user);
 
         return CategoryMapper.INSTANCE.toDto(category);
+    }
+
+    public CategoryResponse createChild(CategoryRequest categoryRequest, long categoryId, User user) {
+        Category category = categoryRepository.getReferenceById(categoryId);
+        Category child = CategoryMapper.INSTANCE.toEntity(categoryRequest);
+
+        child.setParent(category);
+        category.addChildCategory(child);
+        child.setUser(user);
+
+        categoryRepository.save(child);
+        categoryRepository.save(category);
+        userRepo.save(user);
+
+
+        return CategoryMapper.INSTANCE.toDto(child);
     }
 
     public String deleteCategory(long categoryId, User user) {

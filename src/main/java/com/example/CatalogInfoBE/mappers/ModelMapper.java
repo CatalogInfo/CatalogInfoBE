@@ -8,6 +8,9 @@ import java.util.List;
 @Mapper
 public interface ModelMapper {
     default long toId(Model entity) {
+        if(entity == null) {
+            return -1;
+        }
         return entity.getId();
     }
 

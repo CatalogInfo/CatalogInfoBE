@@ -16,6 +16,17 @@ import java.util.List;
 @AllArgsConstructor
 public class User implements Model {
 
+    @Override
+    public String toString() {
+        return "User{" +
+                "id=" + id +
+                ", categories=" + categories +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                '}';
+    }
+
     @Id
     @SequenceGenerator(
             name = "user_sequence",

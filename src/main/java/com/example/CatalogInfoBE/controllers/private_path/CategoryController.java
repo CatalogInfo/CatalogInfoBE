@@ -4,6 +4,8 @@ import com.example.CatalogInfoBE.dto.requests.CategoryRequest;
 import com.example.CatalogInfoBE.dto.responses.ArticleResponse;
 import com.example.CatalogInfoBE.dto.responses.BookResponse;
 import com.example.CatalogInfoBE.dto.responses.VideoResponse;
+import com.example.CatalogInfoBE.mappers.CategoryMapper;
+import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.models.table_entities.User;
 import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import com.example.CatalogInfoBE.services.CategoryService;
@@ -40,6 +42,10 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.getArticles(categoryId), HttpStatus.OK);
     }
 
+    @GetMapping("/{categoryId}")
+    public ResponseEntity<List<CategoryResponse>> getChildren(@RequestHeader HttpHeaders headers, @PathVariable("categoryId") long categoryId) {
+        return new ResponseEntity<>(categoryService.getChildren(categoryId), HttpStatus.OK);
+    }
 
     @PostMapping("/")
     public ResponseEntity<CategoryResponse> createCategory(@RequestBody CategoryRequest categoryRequest, @RequestHeader HttpHeaders headers) {
@@ -48,6 +54,12 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.createCategory(categoryRequest, user), HttpStatus.CREATED);
     }
 
+    @PostMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponse> createChild(@RequestBody CategoryRequest categoryRequest, @PathVariable("categoryId") long categoryId, @RequestHeader HttpHeaders headers) {
+        User user = jwtUserDetailsService.getUserFromHeaders(headers);
+
+        return new ResponseEntity<>(categoryService.createChild(categoryRequest, categoryId, user), HttpStatus.CREATED);
+    }
     @DeleteMapping("/{categoryId}")
     public ResponseEntity<String> deleteCategory(@PathVariable("categoryId") long categoryId, @RequestHeader HttpHeaders headers) {
         User user = jwtUserDetailsService.getUserFromHeaders(headers);

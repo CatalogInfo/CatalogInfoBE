@@ -8,9 +8,11 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import javax.annotation.Nullable;
 import javax.persistence.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Entity
 @Table(name = "categories")
@@ -23,8 +25,20 @@ public class Category implements Model {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
+    @Override
+    public String toString() {
+        return "Category{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                '}';
+    }
+
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Book> books;
+
+    @ManyToOne
+    @JoinColumn(name = "parent_id")
+    private Category parent;
 
     @OneToMany(mappedBy = "category", cascade = CascadeType.ALL)
     private List<Video> videos;
@@ -37,6 +51,9 @@ public class Category implements Model {
     private User user;
 
     private String name;
+
+    @OneToMany(mappedBy = "parent")
+    private List<Category> childCategories;
 
     public void addBook(Book book) {
         books.add(book);
@@ -59,5 +76,13 @@ public class Category implements Model {
 
     public void removeArticle(Article article) {
         articles.remove(article);
+    }
+
+    public void addChildCategory(Category category) {
+        childCategories.add(category);
+    }
+
+    public void removeChildCategory(Category category) {
+        childCategories.remove(category);
     }
 }
