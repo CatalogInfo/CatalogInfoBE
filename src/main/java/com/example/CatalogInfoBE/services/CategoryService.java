@@ -93,6 +93,27 @@ public class CategoryService {
 
     public String deleteCategory(long categoryId, User user) {
         Category category = categoryRepository.getReferenceById(categoryId);
+
+        while (!category.getChildCategories().isEmpty()) {
+            deleteCategoryRecursive(category, user);
+        }
+
+        deleteCategory(category, user);
+
+        return "deleted";
+    }
+
+    private void removeParent(Category category) {
+        if (category.getParent() != null) {
+            Category parent = category.getParent();
+            category.setParent(null);
+            categoryRepository.save(category);
+            parent.removeChildCategory(category);
+            categoryRepository.save(parent);
+        }
+    }
+
+    private void deleteCategory(Category category, User user) {
         List<Book> books = category.getBooks();
         List<Video> videos = category.getVideos();
 
@@ -102,11 +123,18 @@ public class CategoryService {
         for(Video video : videos) {
             videoRepository.delete(video);
         }
-
+        removeParent(category);
         user.removeCategory(category);
         userRepo.save(user);
         categoryRepository.delete(category);
+    }
 
-        return "deleted";
+    public void deleteCategoryRecursive(Category category, User user) {
+
+        if(!category.getChildCategories().isEmpty()) {
+            deleteCategoryRecursive(category.getChildCategories().get(0), user);
+        } else {
+            deleteCategory(category, user);
+        }
     }
 }

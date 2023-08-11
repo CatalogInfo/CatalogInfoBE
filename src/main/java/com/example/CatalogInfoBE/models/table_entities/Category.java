@@ -85,4 +85,5 @@ public class Category implements Model {
     public void removeChildCategory(Category category) {
         childCategories.remove(category);
     }
+
 }
