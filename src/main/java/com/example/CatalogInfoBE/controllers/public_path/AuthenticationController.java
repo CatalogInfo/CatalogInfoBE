@@ -26,6 +26,7 @@ public class AuthenticationController {
         if(response.isEmailUses() || response.isUsernameUses())
             return MakeResponse.makeConflictResponse(response);
 
+        //test commit
         return MakeResponse.makeOkResponse(response);
     }
 

@@ -52,9 +52,19 @@ public class CategoryController {
         return new ResponseEntity<>(categoryService.createCategory(categoryRequest, user), HttpStatus.CREATED);
     }
 
-    @PostMapping("/{categoryId}")
-    public ResponseEntity<CategoryResponse> createChild(@RequestBody CategoryRequest categoryRequest, @PathVariable("categoryId") long categoryId, @RequestHeader HttpHeaders headers) {
+    @PutMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponse> updateCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable(name = "categoryId", required = false) Long categoryId, @RequestHeader HttpHeaders headers) {
         User user = jwtUserDetailsService.getUserFromHeaders(headers);
+
+        return new ResponseEntity<>(categoryService.updateCategory(categoryRequest, categoryId, user), HttpStatus.OK);
+    }
+
+    @PostMapping("/{categoryId}")
+    public ResponseEntity<CategoryResponse> createSubCategory(@RequestBody CategoryRequest categoryRequest, @PathVariable(name = "categoryId") Long categoryId, @RequestHeader HttpHeaders headers) {
+        User user = jwtUserDetailsService.getUserFromHeaders(headers);
+
+        System.out.println(categoryId);
+        if (categoryId == null) return new ResponseEntity<>(categoryService.createCategory(categoryRequest, user), HttpStatus.CREATED);
 
         return new ResponseEntity<>(categoryService.createChild(categoryRequest, categoryId, user), HttpStatus.CREATED);
     }

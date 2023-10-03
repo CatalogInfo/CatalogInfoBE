@@ -75,6 +75,15 @@ public class CategoryService {
         return CategoryMapper.INSTANCE.toDto(category);
     }
 
+    public CategoryResponse updateCategory(CategoryRequest categoryRequest, long categoryId, User user) {
+        Category category = categoryRepository.getReferenceById(categoryId);
+        category.setName(categoryRequest.getName());
+        categoryRepository.save(category);
+        userRepo.save(user);
+
+        return CategoryMapper.INSTANCE.toDto(category);
+    }
+
     public CategoryResponse createChild(CategoryRequest categoryRequest, long categoryId, User user) {
         Category category = categoryRepository.getReferenceById(categoryId);
         Category child = CategoryMapper.INSTANCE.toEntity(categoryRequest);
