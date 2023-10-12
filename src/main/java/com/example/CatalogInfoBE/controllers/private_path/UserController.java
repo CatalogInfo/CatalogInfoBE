@@ -36,4 +36,11 @@ public class UserController {
 
         return new ResponseEntity<>(userService.getCategories(user), HttpStatus.OK);
     }
+
+//    @GetMapping("/categories")
+//    public ResponseEntity<List<CategoryResponse>> getCategoriesByNameContaining(@RequestHeader HttpHeaders headers, @RequestParam(name = "search") String letters) {
+//        User user = jwtUserDetailsService.getUserFromHeaders(headers);
+//
+//        return new ResponseEntity<>(userService.searchCategoryByName(letters, user), HttpStatus.OK);
+//    }
 }

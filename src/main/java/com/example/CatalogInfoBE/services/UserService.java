@@ -4,7 +4,10 @@ import com.example.CatalogInfoBE.dto.responses.CategoryResponse;
 import com.example.CatalogInfoBE.dto.responses.UserResponse;
 import com.example.CatalogInfoBE.mappers.CategoryMapper;
 import com.example.CatalogInfoBE.mappers.UserMapper;
+import com.example.CatalogInfoBE.models.table_entities.Category;
 import com.example.CatalogInfoBE.models.table_entities.User;
+import com.example.CatalogInfoBE.repos.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
@@ -12,6 +15,8 @@ import java.util.List;
 
 @Service
 public class UserService {
+    @Autowired
+    CategoryRepository categoryRepository;
 
     public UserResponse getUserInfo(User user) {
         return UserMapper.INSTANCE.toDto(user);
@@ -19,6 +24,13 @@ public class UserService {
 
     public List<CategoryResponse> getCategories(User user) {
         List<CategoryResponse> responses = CategoryMapper.INSTANCE.toDtos(user.getCategories());
+        formatAndExcludeChildren(responses);
+        return responses;
+    }
+
+    public List<CategoryResponse> searchCategoryByName(String name, User user) {
+        List<Category> categories = categoryRepository.findByNameContainingAndUser(name, user);
+        List<CategoryResponse> responses = CategoryMapper.INSTANCE.toDtos(categories);
         formatAndExcludeChildren(responses);
         return responses;
     }
